@@ -1,0 +1,13 @@
+# Ignore all IDEA specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Ignore all modules
+*.iml
+
+# Ignore Maven or Gradle build directories
+target/
+build/
+out/
