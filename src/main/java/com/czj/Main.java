@@ -6,60 +6,57 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Stack;
+import java.util.*;
 
 public class Main {
 
     public static void main(String[] args) {
-        int[] prices = {7,6,4,3,1};
-        int maxProfit = maxProfit(prices);
-        System.out.println("最大收益:" + maxProfit);
+        int[] nums = {-1,0,1,2,-1,-4};
+        System.out.println(threeSum(nums));
     }
 
-
-    public static int maxProfit(int[] prices) {
-        //价格走向，1升0保持-1降
-        int direct = 0;
-        //收益
-        int profit = 0;
-        //buy， sell时机
-        int buyDay = -1;
-        int sellDay = -1;
-
-        for (int i = 0; i < prices.length - 1; i++) {
-            //升序or降序
-            direct = getDirect(prices[i], prices[i+1]);
-            if (direct == 1) {
-                if (buyDay < 0) {
-                    buyDay = i;
-                    System.out.println((buyDay+1) + "天买入，价格：" + prices[buyDay]);
+    public static List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> result = new ArrayList<>();
+        if (nums.length < 3) {
+            return result;
+        }
+        for (int i = 0; i< nums.length ; i++) {
+            for (int j=0; j< nums.length; j++) {
+                if (j == i) {
+                    continue;
                 }
-            } else if (direct == -1) {
-                if (sellDay < 0 && buyDay > 0) {
-                    sellDay = i;
-                    int currentProfit = prices[sellDay] - prices[buyDay];
-                    profit += currentProfit;
-                    System.out.println((sellDay+1) + "天卖出，价格：" + prices[sellDay] + ", 这波收益：" + currentProfit);
-                    //售出后，清空buyDay和sellDay
-                    buyDay = -1;
-                    sellDay = -1;
+                for( int k = 0; k<nums.length; k++) {
+                    if (k ==i || k ==j) {
+                        continue;
+                    }
+                    if (nums[i] + nums[j] + nums[k] == 0) {
+                        List<Integer> sumZero = new ArrayList<Integer>(Arrays.asList(nums[i], nums[j], nums[k]));
+                        result.add(sumZero);
+                    }
                 }
             }
         }
-        if (sellDay < 0) {
-            sellDay = prices.length - 1;
-            int currentProfit = prices[sellDay] - prices[buyDay];
-            System.out.println("最后还没卖出，只能" + (sellDay+1) + "天卖出，价格：" + prices[sellDay] + ", 这波收益：" + currentProfit);
-            profit += currentProfit;
-        }
-        return profit;
+        return removeDuplicates(result);
     }
 
-    public static int getDirect(int before, int after) {
-        if (before == after) {
-            return 0;
+    public static List<List<Integer>> removeDuplicates(List<List<Integer>> lists) {
+        Set<String> seen = new HashSet<>();
+        List<List<Integer>> uniqueLists = new ArrayList<>();
+
+        for (List<Integer> list : lists) {
+            // 对列表进行排序
+            List<Integer> sortedList = new ArrayList<>(list);
+            Collections.sort(sortedList);
+
+            // 将排序后的列表转换为字符串，便于存储在HashSet中
+            String key = sortedList.toString();
+
+            if (!seen.contains(key)) {
+                seen.add(key);
+                uniqueLists.add(sortedList);
+            }
         }
-        return before < after ? 1 : -1;
+
+        return uniqueLists;
     }
 }
