@@ -11,52 +11,28 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) {
-        int[] nums = {-1,0,1,2,-1,-4};
-        System.out.println(threeSum(nums));
+        System.out.println(myPow(2, -1));
     }
 
-    public static List<List<Integer>> threeSum(int[] nums) {
-        List<List<Integer>> result = new ArrayList<>();
-        if (nums.length < 3) {
-            return result;
+    public static double myPow(double x, int n) {
+        if (n==0) {
+            return 1;
+        } else if (n < 0) {
+            return 1/myPow2(x, -n);
+        } else {
+            return myPow2(x, n);
         }
-        for (int i = 0; i< nums.length ; i++) {
-            for (int j=0; j< nums.length; j++) {
-                if (j == i) {
-                    continue;
-                }
-                for( int k = 0; k<nums.length; k++) {
-                    if (k ==i || k ==j) {
-                        continue;
-                    }
-                    if (nums[i] + nums[j] + nums[k] == 0) {
-                        List<Integer> sumZero = new ArrayList<Integer>(Arrays.asList(nums[i], nums[j], nums[k]));
-                        result.add(sumZero);
-                    }
-                }
-            }
-        }
-        return removeDuplicates(result);
     }
 
-    public static List<List<Integer>> removeDuplicates(List<List<Integer>> lists) {
-        Set<String> seen = new HashSet<>();
-        List<List<Integer>> uniqueLists = new ArrayList<>();
-
-        for (List<Integer> list : lists) {
-            // 对列表进行排序
-            List<Integer> sortedList = new ArrayList<>(list);
-            Collections.sort(sortedList);
-
-            // 将排序后的列表转换为字符串，便于存储在HashSet中
-            String key = sortedList.toString();
-
-            if (!seen.contains(key)) {
-                seen.add(key);
-                uniqueLists.add(sortedList);
-            }
+    public static double myPow2(double x, int n) {
+        if (n == 1) {
+            return x;
         }
-
-        return uniqueLists;
+        if (n % 2 == 0) {
+            return myPow2(x, n/2) * myPow2(x, n/2);
+        } else {
+            return x * myPow2(x, n - 1);
+        }
     }
+
 }
